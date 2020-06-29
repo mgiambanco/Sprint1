@@ -1,0 +1,18 @@
+<div class="p-grid" style='margin-top: 70px;'>
+    <div class='p-col-6' style='padding-left: 20px;'>
+        <b>{{list.title}}</b> - {{list.timeframe}} <i (click)='addItem(item.id)' class='fa fa-plus'></i>
+    </div>
+    <div class='p-col-6' style='padding-right: 20px;'>
+        <div (click)='filter(user.id)' *ngFor="let user of users" class='clickable pull-right img-circle user_badge' style='margin-right: 5px;'>
+            {{user.first_name[0] + " " + user.last_name[0]}}</div>
+    </div>
+</div>
+
+<div class="p-grid" *ngIf="list.id">
+    <div class='p-col-6'>
+        <app-list></app-list>
+    </div>
+    <div class='p-col-6'>
+        <app-dashboard [list]='list'></app-dashboard>
+    </div>
+</div>

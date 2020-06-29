@@ -1,10 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  templateUrl: './app.component.html'
 })
-export class AppComponent {
-  title = 'tasks';
+export class AppComponent implements OnInit {
+
+  constructor() {
+
+  }
+
+  ngOnInit() {
+    localStorage.setItem("company", '1111');
+  }
 }

@@ -1,0 +1,142 @@
+<div *ngFor="let sprint of list">
+    <div style='padding: 20px; padding-left: 0px; margin-bottom: 20px; width: 100%; overflow-x: auto; overflow-y: hidden; white-space: nowrap; margin-top: 0px; margin-right: 20px;'>
+        <div style='border-radius: 10px; box-shadow: 0 4px 20px 1px rgba(0,0,0,.06), 0 1px 4px rgba(0,0,0,.08); display: inline-table; background-color: #ffffff; height: 570px; margin-left: 20px; width: 280px;' *ngFor="let list of sprint.lists">
+            <div style='border-bottom: 1px solid #ececec; padding: 10px; display: block;'>{{list.title}} <div [pTooltip]='list.tasks?.length + " Tasks"' class='badge_number'>{{list.tasks?.length}}</div>
+                <i (click)='funcToggleEdit(list)' class='fa fa-pencil' style='margin-left: 10px;'></i>
+                <i (click)='createTask(sprint.id, list.id)' class='fa fa-plus' style='margin-left: 10px;'></i></div>
+            <div pDroppable="dd" (onDrop)="drop($event, sprint.id, list.id)" style='margin-top: 10px; height: 90%; overflow-y: scroll;'>
+                <div pDraggable="dd" (onDragStart)="dragStart($event,task, list.id)" (onDragEnd)="dragEnd($event)" (click)='viewTask(sprint.id, list.id, task)' *ngFor="let task of list.tasks" class='clickable' style='padding: 10px; border-bottom: 1px solid #ececec; height: 100px;'>
+                    <b>{{task.title}} <div [pTooltip]='getPriorityText(task.priority)' [ngClass]="getPriority(task.priority)"></div></b>
+                    <p style='white-space: pre-wrap;'>
+                        {{task.description | slice: 0: 100}}{{task.description.length > 100 ? "..." : ""}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-sidebar *ngIf="edit_list" [(visible)]="toggleListEdit" position='right' styleClass="keywest_sidebar ui-sidebar-md">
+    <div class="sidebar_wrapper">
+        <div class='sidebar_header'>
+            Editing {{edit_list.title}}
+        </div>
+        <div class='sidebar_container'>
+            <div class='keywest_panel'>
+                <div class="p-grid">
+                    <div class='p-col-12'>
+                        <label class='sidebar_label'>Name</label>
+                        <input type='text' [(ngModel)]="edit_list.title" class='form-control'>
+                    </div>
+                </div>
+
+                <div class="p-grid">
+                    <div class='p-col-12'>
+                        <label class='sidebar_label'>Tasks</label>
+                    </div>
+                </div>
+
+                <p-table [value]="edit_list.tasks">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Name</th>
+                            <th style='width: 40px;'>&nbsp;</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-task>
+                        <tr>
+                            <td>{{task.title}}</td>
+                            <td><i class='fa fa-times'></i></td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class='btn_container'>
+            <a class='btn btn_customizable'>Save</a>
+        </div>
+    </div>
+</p-sidebar>
+
+<p-sidebar *ngIf="task" [(visible)]="toggleTask" position='right' styleClass="keywest_sidebar ui-sidebar-xl">
+    <div class="sidebar_wrapper">
+        <div class='sidebar_header' *ngIf="!task.title_editing" (click)='task.title_editing = !task.title_editing'>
+            {{task.title}}
+        </div>
+        <div class='sidebar_header' *ngIf="task.title_editing">
+            <div class="p-grid">
+                <div class='p-col-6'>
+                    <input type='text' [(ngModel)]="task.title" (focusout)='task.title_editing = !task.title_editing' class='form-control'>
+                </div>
+            </div>
+        </div>
+        <div class='sidebar_container'>
+            <div class='keywest_panel'>
+                <div class="p-grid">
+                    <div class='p-col-9'>
+                        <div class="p-grid">
+                            <div class='p-col-12'>
+                                <label class='sidebar_label'>Description</label>
+                                <textarea rows='5' class='form-control' style='height: 200px;' [(ngModel)]="task.description"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="p-grid">
+                            <div class='p-col-12'>
+                                <label class='sidebar_label'>Chat</label>
+                            </div>
+                        </div>
+
+                        <div style='overflow-y: auto; max-height: 400px;'>
+                            <div class="p-grid" *ngFor="let chat of task.chat">
+                                <div class='p-col-12'>
+                                    <label>{{chat.name}}</label>
+                                    <p>{{chat.message}}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-grid">
+                            <div class='p-col-12'>
+                                <textarea [(ngModel)]="message" rows='2' (keydown.enter)='submitChatMessage()' style='width: 100%;'></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class='p-col-3'>
+                        <div class="p-grid" style='margin-bottom: 10px;'>
+                            <div class='p-col-12 pull-right'>
+                                Priority <div [pTooltip]='getPriorityText(task.priority)' [ngClass]="getPriority(task.priority)" style='margin-left: 10px; margin-top: 5px;'>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div (click)='toggleAssignee = !toggleAssignee' class="p-grid" *ngIf="task.user_id && !toggleAssignee">
+                            <div class='p-col-12 pull-right'>
+                                <b>Assignee</b><br>
+                                <span class='clickable'>{{task.name}}</span>
+                            </div>
+                        </div>
+
+                        <div (click)='toggleAssignee = !toggleAssignee' class="p-grid" *ngIf="!task.user_id && !toggleAssignee">
+                            <div class='p-col-12 pull-right'>
+                                <b>Assignee</b><br>
+                                <span class='clickable'>Unassigned</span>
+                            </div>
+                        </div>
+
+                        <div class="p-grid" *ngIf="toggleAssignee">
+                            <div class='p-col-12 pull-right'>
+                                <b>Assignee</b><br>
+                                <p-dropdown [autoDisplayFirst]='false' dataKey='id' optionLabel='name' (onChange)='funcUpdateAssignee($event)' [options]="users" [(ngModel)]="task.user_id">
+                                </p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='btn_container'>
+            <a (click)='updateTask()' class='btn btn_customizable'>Save</a>
+        </div>
+    </div>
+</p-sidebar>
