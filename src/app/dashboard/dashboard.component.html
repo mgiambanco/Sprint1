@@ -1,6 +1,7 @@
-<div style='margin-right: 20px; border-radius: 10px; box-shadow: 0 4px 20px 1px rgba(0,0,0,.06), 0 1px 4px rgba(0,0,0,.08); height: 570px; margin-top: 20px; margin-left: 20px;'>
+<div class='dashboard_container'>
     <p-menubar [model]="items"></p-menubar>
 
     <app-resources *ngIf="view == 'resources'" [list]='list'></app-resources>
     <app-availability *ngIf="view == 'availability'" [list]='list'></app-availability>
+    <app-calendar *ngIf="view == 'calendar'" [list]='list' ></app-calendar>
 </div>

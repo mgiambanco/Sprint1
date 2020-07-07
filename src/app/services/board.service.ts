@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
-import { switchMap, map } from 'rxjs/operators';
-import { AngularFireDatabase, AngularFireObject, AngularFireList } from 'angularfire2/database';
-
+import { Subject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -12,6 +10,7 @@ import { AngularFireDatabase, AngularFireObject, AngularFireList } from 'angular
 export class BoardService {
     user: any = { uid: 1234 };
     company: any = { uid: 1111 };
+    public openTask = new Subject<any>();
 
     constructor(
         private afAuth: AngularFireAuth,
@@ -54,7 +53,6 @@ export class BoardService {
         return this.db.collection('sprints').doc(sprint_id).collection('lists').doc(list_id).collection('tasks').doc(task_id).collection("chat").add(payload);
 
     }
-
 
     getTasks(sprint_id, list_id) {
         return this.db.collection('sprints').doc(sprint_id).collection('lists').doc(list_id).collection('tasks').valueChanges({ idField: 'id' });
@@ -100,6 +98,10 @@ export class BoardService {
 
     updateTask(sprint_id, list_id, task_id, task) {
         return this.db.collection('sprints').doc(sprint_id).collection('lists').doc(list_id).collection('tasks').doc(task_id).update( task );
+    }
+
+    updateList(sprint_id, list_id, payload) {
+        return this.db.collection('sprints').doc(sprint_id).collection('lists').doc(list_id).update( payload );
     }
 
     removeTask(boardId: string, task: any) {

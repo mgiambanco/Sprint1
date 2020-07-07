@@ -1,8 +1,15 @@
-<div>
-    <div style='padding: 10px; background-color: #7469b3; height: 60px; position: fixed; width: 100%; top: 0px; left: 0px;'>
-        hi
+<p-menu #menu appendTo='body' [popup]="true" [model]="mainMenu"></p-menu>
+
+<div class='app_container'>
+    <div class="p-grid">
+        <div class='p-col-6'></div>
+        <div class='p-col-6'>
+            <div class='pull-right' (click)='funcToggleMainMenu(menu, $event)'>
+                <i class='fa fa-cog mainMenuIcon'></i>
+            </div>
+        </div>
     </div>
-    <div style='margin-top: 50px;'>
-        <router-outlet></router-outlet>
-    </div>
+</div>
+<div style='margin-top: 70px;'>
+    <router-outlet></router-outlet>
 </div>

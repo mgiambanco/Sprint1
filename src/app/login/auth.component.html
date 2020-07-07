@@ -1,0 +1,17 @@
+<div class='p-grid'>
+	<div class='p-col-4'></div>
+	<div class='p-col-4'>
+		<div [ngSwitch]="view">
+			<div *ngSwitchCase="login">
+				<app-login></app-login>
+			</div>
+			<div *ngSwitchCase="forgot">
+				<app-forgot></app-forgot>
+			</div>
+			<div *ngSwitchCase="register">
+				<app-register></app-register>
+			</div>
+		</div>
+	</div>
+	<div class='p-col-4'></div>
+</div>

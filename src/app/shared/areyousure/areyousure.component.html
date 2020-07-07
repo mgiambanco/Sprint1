@@ -1,0 +1,15 @@
+<p-overlayPanel #op appendTo='body'>
+	<div class="panel panel-overlay panel-white">
+		<div class="panel-heading" style='height: inherit !important; text-align: center;'>
+			<div class='panel-title'>
+				{{message}}
+			</div>
+		</div>
+		<div class='panel-body panel-body-overlay' style='padding: 0px;'>
+			<a (click)='funcYes($event)' class='btn btn-overlay btn-success' style='float: left; width: 50%;'>{{yes}}</a>
+			<a (click)='op.hide($event)' class='btn btn-overlay btn-danger' style='float: left; width: 50%;'>{{no}}</a>
+		</div>
+	</div>
+</p-overlayPanel>
+<span #actualTarget *ngIf="!loading" [pTooltip]="tooltip" container="body" tooltipPosition="top" class='class' (click)='op.toggle($event, actualTarget)'><i class='{{icon}}'></i> {{text}}</span>
+<img class="actionLoader pull-right" *ngIf="loading" src="{{fullImagePath}}" />

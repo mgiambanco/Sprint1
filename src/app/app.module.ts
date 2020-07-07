@@ -8,19 +8,24 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { environment } from 'src/environments/environment';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { MenuModule } from 'primeng/menu';
+import { AuthGuardService } from './services/auth-guard.service';
+import { AuthService } from './services/auth.service';
+import { AngularFireAuth } from "@angular/fire/auth";
 
 @NgModule({
 	declarations: [
 		AppComponent
 	],
 	imports: [
+		MenuModule,
 		BrowserAnimationsModule,
 		BrowserModule,
 		AppRoutingModule,
 		AngularFireModule.initializeApp(environment.firebase, 'fcc-book-trading'),
-        AngularFireDatabaseModule
+		AngularFireDatabaseModule
 	],
-	providers: [],
+	providers: [AuthGuardService, AuthService, AngularFireAuth],
 	bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { ListComponent } from './list.component';
+import { SettingsComponent } from './settings.component';
 import { Routes, RouterModule } from '@angular/router';
 import { SidebarModule } from 'primeng/sidebar';
 import { BoardService } from '../services/board.service';
@@ -21,15 +21,17 @@ import { CommonService } from '../services/common.service';
 import {InplaceModule} from 'primeng/inplace';
 import { ChatModule } from '../shared/chat/chat.module';
 import { AccordionModule } from 'primeng/accordion';
-import { TestingModule } from '../shared/testing/testing.module';
+
+const routes: Routes = [
+    { path: '', component: SettingsComponent }
+]
 
 @NgModule({
     declarations: [
-        ListComponent
+        SettingsComponent
     ],
     imports: [
         AccordionModule,
-        TestingModule,
         ChatModule,
         InplaceModule,
         CalendarModule,
@@ -42,10 +44,11 @@ import { TestingModule } from '../shared/testing/testing.module';
         TooltipModule,
         ScrollPanelModule,
         CommonModule,
-        SidebarModule
+		SidebarModule,
+		RouterModule.forChild(routes)
     ],
     providers: [BoardService, MessageService, DatePipe, CommonService],
-    exports: [ListComponent],
-    entryComponents: [ListComponent]
+    exports: [SettingsComponent],
+    entryComponents: [SettingsComponent]
 })
-export class ListModule { }
+export class SettingsModule { }

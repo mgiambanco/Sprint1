@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
             { label: "At a Glance", command: () => { this.view = "availability" } },
             { label: "Resources", command: () => { this.view = "resources" } },
             { label: "Testing Procedures", command: () => { this.view = "testing" } },
+            { label: "Calendar", command: () => { this.view = "calendar" } },
         ]
     }
 

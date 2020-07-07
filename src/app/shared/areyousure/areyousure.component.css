@@ -1,0 +1,16 @@
+.ui-overlaypanel-content {
+	padding: 0px !important;
+	width: 250px;
+}
+
+.btn-overlay {
+	border-radius: 0px;
+}
+
+.panel-overlay {
+	margin-bottom: 0px;
+}
+
+.panel-body-overlay {
+	margin-top: 0px;
+}

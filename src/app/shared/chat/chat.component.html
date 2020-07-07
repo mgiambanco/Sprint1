@@ -1,0 +1,19 @@
+<p-accordion>
+	<p-accordionTab header="Chat">
+		
+		<div style='overflow-y: auto; max-height: 400px;'>
+			<div class="p-grid" *ngFor="let chat of chats">
+				<div class='p-col-12'>
+					<label>{{chat.name}}</label>
+					<p>{{chat.message}}</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="p-grid">
+			<div class='p-col-12'>
+				<textarea [(ngModel)]="message" rows='2' (keydown.enter)='submitChatMessage()' style='width: 100%;'></textarea>
+			</div>
+		</div>
+	</p-accordionTab>
+</p-accordion>

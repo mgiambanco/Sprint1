@@ -6,8 +6,7 @@
                     {{users.name}} <div [pTooltip]='users.tasks.length + " Tasks"' class='badge_number'>{{users.tasks.length}}</div>
                 </div>
                 <div class='p-col-3'>
-                    <input [(ngModel)]="users.strSearch" (keyup)="tbl.filter($event.target.value, 'title', 'contains')"
-                        type='text' placeholder='Search' class='form-control'>
+                    <input [(ngModel)]="users.strSearch" (keyup)="tbl.filter($event.target.value, 'title', 'contains')" type='text' placeholder='Search' class='form-control'>
                 </div>
             </div>
             <p-table #tbl [value]="users.tasks" [columns]='columns'>
@@ -15,9 +14,7 @@
                     <tr>
                         <th *ngFor="let col of columns" [pSortableColumn]='col.field'>
                             {{col.header}}
-                            <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
-                                ariaLabelDesc="Activate to sort in descending order"
-                                ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                            <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
                         </th>
                     </tr>
                 </ng-template>
@@ -26,16 +23,10 @@
                         <td *ngFor="let col of columns">
                             <div [ngSwitch]="col.field">
                                 <div *ngSwitchCase="'title'">
-                                    <a (click)='toggleTask(task)' class='clickable'>{{task[col.field]}} <i
-                                            pTooltip='Send an email reminder' (click)='sendReminder(task)'
-                                            class='fa fa-envelope' style='margin-left: 10px;'></i> <i
-                                            *ngIf="task.description" [pTooltip]='task.description'
-                                            class='fa fa-info-circle' style='margin-left: 10px;'></i></a>
+                                    <a (click)='toggleTask(task)' class='clickable'>{{task[col.field]}} <i pTooltip='Send an email reminder' (click)='sendReminder(task)' class='fa fa-envelope' style='margin-left: 10px;'></i> <i *ngIf="task.description" [pTooltip]='task.description' class='fa fa-info-circle' style='margin-left: 10px;'></i></a>
                                 </div>
                                 <div *ngSwitchCase="'priority'">
-                                    <div [pTooltip]='getPriorityText(task.priority)'
-                                        [ngClass]="getPriority(task.priority)"
-                                        style='display: block; width: 100%; padding: 5px; height: 30px; text-align: center; color: #fff;'>
+                                    <div [pTooltip]='getPriorityText(task.priority)' [ngClass]="getPriority(task.priority)" style='display: block; width: 100%; padding: 5px; height: 30px; text-align: center; color: #fff;'>
                                         {{ucFirst(task.priority)}}
                                     </div>
                                 </div>

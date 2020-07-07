@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { BoardService } from '../services/board.service';
 import { MessageService } from 'primeng/api';
+import { FirebaseFirestore, FirebaseApp } from 'angularfire2';
+import { DatePipe } from '@angular/common';
+import { CommonService } from '../services/common.service';
 
 @Component({
     selector: 'app-list',
@@ -24,11 +27,16 @@ export class ListComponent implements OnInit {
 
     constructor(
         private boardService: BoardService,
-        private messageService: MessageService
+        public commonService: CommonService,
+        private messageService: MessageService,
+        private datePipe: DatePipe
     ) {
 
     }
     ngOnInit() {
+        this.boardService.openTask.subscribe(res => {
+            this.viewTask(res.sprint_id, res.board_id, res.task)
+        })
         this.company = localStorage.getItem("company");
         console.log(this.company);
         this.getList();
@@ -45,15 +53,29 @@ export class ListComponent implements OnInit {
         // this.boardService.createSprint(payload);
 
         this.boardService.getSprint(this.company).subscribe(res => {
-            console.log(res);
+            // console.log(res);
             this.list = res;
             this.boardService.getList(this.list[0].id).subscribe(res => {
                 this.list[0].lists = res;
-                console.log(res);
+                // console.log(res);
                 this.list[0].lists.forEach(element => {
                     this.boardService.getTasks(this.list[0].id, element.id).subscribe(res => {
                         element.tasks = res;
+                        element.tasks.forEach(task => {
+                            if (task.user_id) {
+                                this.boardService.getUserbyID(task.user_id).subscribe(user => {
+                                    console.log(user)
+                                    task.first_name = user['first_name'] ? user['first_name'] : "";
+                                    task.last_name = user['last_name'] ? user['last_name'] : "";
+                                })
+                            } else {
+                                task.first_name = "";
+                                task.last_name = "";
+                            }
 
+                        });
+
+                        console.log(element.tasks)
                     })
 
                 });
@@ -81,9 +103,11 @@ export class ListComponent implements OnInit {
     }
 
     updateTask() {
+        let dte = this.datePipe.transform(this.task.duedate, "MM/dd/yyyy");
         let payload = {
             description: this.task.description,
-            title: this.task.title
+            title: this.task.title,
+            duedate: dte ? dte : ""
         }
         // console.log(this.sprint_id)
         // console.log(this.list_id)
@@ -92,6 +116,15 @@ export class ListComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Task Updated' });
     }
 
+    updateList(list) {
+        let payload = {
+            title: list.title
+        }
+        console.log(this.sprint_id)
+        console.log(list.id)
+        this.boardService.updateList(this.sprint_id, list.id, payload);
+        this.messageService.add({ severity: 'success', summary: 'List Updated' });
+    }
     addItem(id) {
         this.boardService.createListItem("dummy", id);
     }
@@ -128,18 +161,18 @@ export class ListComponent implements OnInit {
         // console.log(this.task);
     }
 
-    submitChatMessage() {
-        let payload = {
-            name: "Mario Giambanco",
-            message: this.message
-        }
-        this.boardService.insertTaskChat(this.sprint_id, this.list_id, this.task.id, payload);
-        this.message = "";
+   
+
+    funcToggleEdit(sprint, list) {
+        this.edit_list = list;
+        this.sprint_id = sprint;
+        this.toggleListEdit = true;
     }
 
-    funcToggleEdit(list) {
-        this.edit_list = list;
-        this.toggleListEdit = true;
+    funcDeleteTask(list, task) {
+        this.boardService.deleteTask(this.sprint_id, list.id, task.id);
+        this.messageService.add({ severity: 'success', summary: 'Task Deleted' });
+
     }
 
     getPriority(priority) {

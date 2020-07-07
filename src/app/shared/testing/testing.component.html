@@ -1,0 +1,15 @@
+<p-accordion>
+	<p-accordionTab header="Testing">
+
+		<div style='overflow-y: auto; max-height: 400px;'>
+			<div class="p-grid" *ngFor="let chat of chats">
+				<div class='p-col-12'>
+					<label>{{chat.name}}</label>
+					<p>{{chat.message}}</p>
+				</div>
+			</div>
+		</div>
+
+
+	</p-accordionTab>
+</p-accordion>

@@ -8,12 +8,14 @@ import { ResourcesModule } from './views/resources/resources.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AvailabilityModule } from './views/availibility/availability.module';
+import { AppCalendarModule } from './views/calendar/calendar.module';
 
 @NgModule({
     declarations: [
         DashboardComponent
     ],
     imports: [
+        AppCalendarModule,
         AvailabilityModule,
         ResourcesModule,
         MenubarModule,

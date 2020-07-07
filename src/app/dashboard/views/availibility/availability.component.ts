@@ -32,33 +32,31 @@ export class AvailabilityComponent implements OnInit {
 
     getData() {
         this.availability = [];
-        // console.log(this.list.id)
         this.boardService.getUsers(this.list.company).subscribe(users => {
             users.forEach(user => {
                 let out = user;
-                // console.log(user.id);
-                // console.log(out);
 
                 this.boardService.getList(this.list.id).pipe(take(1)).subscribe(res => {
                     out.tasks = [];
                     res.forEach(elem => {
-                        console.log(user.id);
+                        // console.log(user.id);
                         this.boardService.getTasksbyUserID(this.list.id, elem.id, user.id).pipe(take(1)).subscribe(tasks => {
-                            console.log(tasks);
+                            // console.log(tasks);
                             if (tasks.length) {
                                 tasks.forEach(task => {
                                     task.status = elem.title;
+                                    task.sprint_id = this.list.id;
+                                    task.board_id = elem.id;
+                                    task.task = task;
                                     if (!task.priority) { task.priority = "Not Set"; }
                                     if (task) { out.tasks.push(task); }
                                 })
                             }
                         })
-                        // console.log(out);
                     })
                     this.availability.push(out);
                 })
             })
-            // console.log(this.availability)
         })
 
     }
@@ -106,7 +104,8 @@ export class AvailabilityComponent implements OnInit {
     }
 
     toggleTask(task) {
-
+        this.boardService.openTask.next(task);
+        console.log(task);
     }
 
     ucFirst(str) {
