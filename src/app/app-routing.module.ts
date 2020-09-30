@@ -6,8 +6,9 @@ const routes: Routes = [
   { path: "board", loadChildren: () => import('./board/board.module').then(m => m.BoardModule), canActivate: [AuthGuard] },
   { path: "settings", loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule), canActivate: [AuthGuard] },
   { path: "login", loadChildren: () => import('./login/auth.module').then(m => m.AuthModule) },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: '**', redirectTo: '/login', pathMatch: 'full' }
+  { path: "home", loadChildren: () => import('./home/home.module').then(m => m.HomeModule) },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '**', redirectTo: '/home', pathMatch: 'full' }
 ]
 
 @NgModule({
